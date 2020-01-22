@@ -1,0 +1,42 @@
+{
+  "name": "restockmystock",
+  "version": "1.0.0",
+  "description": "Basic REST API to keep track and stats of an inventory for restocking purposes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Paulao17/restockmystock.git"
+  },
+  "keywords": [
+    "rest",
+    "inventory",
+    "stock",
+    "restock"
+  ],
+  "author": "Paulao17",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Paulao17/restockmystock/issues"
+  },
+  "homepage": "https://github.com/Paulao17/restockmystock#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "bodymen": "^1.1.0",
+    "connect-redis": "^4.0.3",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "mongoose": "^5.8.7",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "apidoc": "^0.19.1",
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
+  }
+}
