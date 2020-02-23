@@ -25,7 +25,6 @@ module.exports.view = function (req, res, next) {
 module.exports.addPoints = function (req, res, next) {
   if (!req.user) return res.status(401).json({valid: false, message: 'Missing authentication'})
   if (!(req.user.hasRole('addPoints') || req.user.hasRole('admin'))) return res.status(403).json({valid: false, message: 'Missing permission'})
-  console.log(req.user.hasRole('addPoints'))
   req.body.amount = parseFloat(req.body.amount) // TODO no negative values?
   Card.findOne({_id: req.params.id})
     .then((card) => {
