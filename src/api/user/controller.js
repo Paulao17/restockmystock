@@ -9,7 +9,10 @@ module.exports.sayHi = (req, res, next) => {
 }
 
 module.exports.create = (req, res, next) => {
-  if (!req.user) res.status(401).json({valid: false, message: 'Missing authentication'})
+  if (!req.user) return res.status(401).json({
+    valid: false,
+    message: 'Missing authentication'
+  })
   User.create({
       username: req.body.username,
       password: req.body.password
@@ -30,7 +33,70 @@ module.exports.create = (req, res, next) => {
 
 module.exports.viewSelf = (req, res, next) => {
   if (req.user)
-    res.json({id: req.user._id, username: req.user.username, roles: req.user.roles})
+    res.json(req.user.view(true))
   else
-    res.status(401).json({valid: false, message: 'Missing authentication'})
+    res.status(401).json({
+      valid: false,
+      message: 'Missing authentication'
+    })
+}
+
+module.exports.addRole = (req, res, next) => {
+  if (!req.user) return res.status(401).json({
+    valid: false,
+    message: 'Missing authentication'
+  })
+  if ((!(req.user.hasRole('addRoles') || req.user.hasRole('admin'))) || (req.body.role === 'admin' && !req.user.hasRole('admin')))
+    return res.status(403).json({
+      valid: false,
+      message: 'Missing permission'
+    })
+
+  User.findOne({
+      username: req.params.username
+    })
+    .then((user) => {
+      if (!user) return res.status(404).json({
+        valid: false,
+        message: 'Inexistant user'
+      })
+
+      user.roles.push(req.body.role)
+      user.save()
+      res.json({
+        roles: user.roles
+      })
+    })
+    .catch(next)
+}
+
+module.exports.removeRole = (req, res, next) => {
+  if (!req.user) return res.status(401).json({
+    valid: false,
+    message: 'Missing authentication'
+  })
+  if ((!(req.user.hasRole('addRoles') || req.user.hasRole('admin'))) || (req.body.role === 'admin' && !req.user.hasRole('admin')))
+    return res.status(403).json({
+      valid: false,
+      message: 'Missing permission'
+    })
+
+  User.findOne({
+      username: req.params.username
+    })
+    .then((user) => {
+      if (!user) return res.status(404).json({
+        valid: false,
+        message: 'Inexistant user'
+      })
+
+      if (user.roles.includes(req.body.role)) {
+        user.roles.splice(user.roles.indexOf(req.body.role), 1);
+      }
+      user.save()
+      res.json({
+        roles: user.roles
+      })
+    })
+    .catch(next)
 }

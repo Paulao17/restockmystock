@@ -37,14 +37,48 @@ router.post('/', passport.session(),
  * @apiName View self
  * @apiGroup User
  * @apiSuccess (Success 200) {String} username Username of the user.
- * @apiSuccess (Success 200) {String} id Id of the user.
- * @apiSuccess (Success 200) {Array} roles Roles of the user
+ * @apiSuccess (Success 200) {String} _id Id of the user.
+ * @apiSuccess (Success 200) {Array} roles Roles of the user.
  * @apiError 400 Invalid parameters.
  * @apiError 401 Missing authentication.
  * @apiExample {curl} Example usage:
  *     curl -H 'Content-Type: application/json' -H 'Cookie: connect.sid=SESSIONTOKEN'  localhost:9000/user/me -v
  */
 router.get('/me', passport.session(), user.viewSelf)
+
+/**
+ * @api {post} /user/:username/roles Add role
+ * @apiDescription Adds a role to a user. Note that the admin role can only be added by a user with the admin role
+ * @apiVersion 0.0.1
+ * @apiName Add role
+ * @apiGroup User
+ * @apiPermission addRoles
+ * @apiPermission admin
+ * @apiParam {String} username The role to add to the user
+ * @apiSuccess (Success 200) {Array} roles The updated list of the user's roles.
+ * @apiError 400 Invalid parameters.
+ * @apiError 401 Missing authentication.
+ * @apiExample {curl} Example usage:
+ *     curl -H 'Content-Type: application/json' -H 'Cookie: connect.sid=SESSIONTOKEN' -d '{"role":"addPoints"}' localhost:9000/user/foo/roles -v
+ */
+router.post('/:username/roles', passport.session(), bodymen.middleware({role: String}), user.addRole)
+
+/**
+ * @api {delete} /user/:username/roles Remove role
+ * @apiDescription Removes a role from a user. Note that the admin role can only be removed by a user with the admin role
+ * @apiVersion 0.0.1
+ * @apiName Remove role
+ * @apiGroup User
+ * @apiPermission addRoles
+ * @apiPermission admin
+ * @apiParam {String} username The role to remove from the user
+ * @apiSuccess (Success 200) {Array} roles The updated list of the user's roles.
+ * @apiError 400 Invalid parameters.
+ * @apiError 401 Missing authentication.
+ * @apiExample {curl} Example usage:
+ *     curl -H 'Content-Type: application/json' -H 'Cookie: connect.sid=SESSIONTOKEN' -d '{"role":"addPoints"}' -X DELETE localhost:9000/user/foo/roles -v
+ */
+router.delete('/:username/roles', passport.session(), bodymen.middleware({role: String}), user.removeRole)
 
 router.use(bodymen.errorHandler)
 
