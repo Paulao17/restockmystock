@@ -8,7 +8,7 @@ const passport = require('passport')
 let router = new Router()
 
 router.use(bodyParser.json())
-router.post('/',bodymen.middleware(model), passport.authenticate('login'), controller.sayHi)
+router.post('/', bodymen.middleware(model), passport.authenticate('login'), controller.sayHi)
 
 router.use(bodymen.errorHandler())
 

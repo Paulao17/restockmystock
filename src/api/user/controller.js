@@ -9,6 +9,7 @@ module.exports.sayHi = (req, res, next) => {
 }
 
 module.exports.create = (req, res, next) => {
+  if (!req.user) res.status(401).json({valid: false, message: 'Missing authentication'})
   User.create({
       username: req.body.username,
       password: req.body.password
@@ -25,4 +26,11 @@ module.exports.create = (req, res, next) => {
         next(err)
       }
     })
+}
+
+module.exports.viewSelf = (req, res, next) => {
+  if (req.user)
+    res.json({id: req.user._id, username: req.user.username, roles: req.user.roles})
+  else
+    res.status(401).json({valid: false, message: 'Missing authentication'})
 }

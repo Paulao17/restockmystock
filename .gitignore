@@ -1,6 +1,8 @@
 # Application Specific
 data
 private.key*
+doc
+dump.rdb
 
 # Logs
 logs

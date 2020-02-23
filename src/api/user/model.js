@@ -20,6 +20,9 @@ let userSchema = new Schema({
     required: true,
     minlength: 6,
     maxlength: 128
+  },
+  roles: {
+    type: [String]
   }
 },
 {
@@ -55,6 +58,10 @@ userSchema.methods = {
 
   authenticate(password) {
     return bcrypt.compareSync(password, this.password) ? this : false
+  },
+
+  hasRole(role) {
+    return this.roles.includes(role)
   }
 }
 

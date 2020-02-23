@@ -14,7 +14,11 @@ let user1 = {
 }
 
 beforeAll(() => {
-  mongoose.connect(config.mongo.uri, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+  mongoose.connect(config.mongo.uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+  })
 })
 
 afterAll(() => {
@@ -27,7 +31,9 @@ describe('POST /auth/login', () => {
   })
 
   afterEach(async () => {
-    await User.deleteOne({username:'testy'})
+    await User.deleteOne({
+      username: 'testy'
+    })
   })
 
   it('works', (done) => {
@@ -40,14 +46,20 @@ describe('POST /auth/login', () => {
 
   it('doesn\'t recognize the username', (done) => {
     request(app()).post('/')
-      .send({username: 'nottesty', password:'654321'})
+      .send({
+        username: 'nottesty',
+        password: '654321'
+      })
       .expect('Unauthorized')
       .expect(401, done)
   })
 
   it('doesn\'t recognize the password', (done) => {
     request(app()).post('/')
-      .send({username: 'testy', password:'nottherightpasswordeh'})
+      .send({
+        username: 'testy',
+        password: 'nottherightpasswordeh'
+      })
       .expect('Unauthorized')
       .expect(401, done)
   })

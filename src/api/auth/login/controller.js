@@ -1,3 +1,3 @@
 module.exports.sayHi = (req, res) => {
-  res.json(req.body)
+  res.json({valid:true, successful: true})
 }

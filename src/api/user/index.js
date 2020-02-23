@@ -9,10 +9,9 @@ const router = new Router()
 
 router.use(passport.initialize());
 router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({ extended: false }))
-
-router.get('/',
-  user.sayHi)
+router.use(bodyParser.urlencoded({
+  extended: false
+}))
 
 /**
  * @api {post} /user Create
@@ -27,10 +26,25 @@ router.get('/',
  * @apiError 409 User already exists.
  * @apiExample {curl} Example usage:
  *     curl -H 'Content-Type: application/json' -d '{"username":"foo","password":"bar123"}' localhost:9000/user -v
-*/
-router.post('/',
+ */
+router.post('/', passport.session(),
   bodymen.middleware(schema),
   user.create)
+
+/**
+ * @api {get} /user/me View self
+ * @apiVersion 0.0.1
+ * @apiName View self
+ * @apiGroup User
+ * @apiSuccess (Success 200) {String} username Username of the user.
+ * @apiSuccess (Success 200) {String} id Id of the user.
+ * @apiSuccess (Success 200) {Array} roles Roles of the user
+ * @apiError 400 Invalid parameters.
+ * @apiError 401 Missing authentication.
+ * @apiExample {curl} Example usage:
+ *     curl -H 'Content-Type: application/json' -H 'Cookie: connect.sid=SESSIONTOKEN'  localhost:9000/user/me -v
+ */
+router.get('/me', passport.session(), user.viewSelf)
 
 router.use(bodymen.errorHandler)
 
